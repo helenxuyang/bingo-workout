@@ -1,10 +1,11 @@
 import { useEffect } from "react"
 import { generateBoard } from "./generateBoard";
 import type { Board } from "./types";
-import { DATE_GENERATED, getBingos, getBoard, getFullBoardBingos, saveBoard, setBingos, setFullBoardBingos } from "./localStorageUtils";
+import { DATE_GENERATED, getBoard, getBoardSize, incrementBingos, saveBoard } from "./localStorageUtils";
 import { countBingos, isFullBoardBingo } from "./boardUtils";
+import { DEFAULT_BOARD_SIZE } from "./boardConstants";
 
-export const useDailyUpdate = (today: string, setBoard: (board: Board | null) => void, boardSize: number, forceUpdate = false): void => {
+export const useDailyUpdate = (today: string, setBoard: (board: Board | null) => void, forceUpdate = false): void => {
   useEffect(() => {
     const lastDate = window.localStorage.getItem(DATE_GENERATED);
     const dateChanged = !lastDate || today !== lastDate;
@@ -12,17 +13,12 @@ export const useDailyUpdate = (today: string, setBoard: (board: Board | null) =>
       const oldBoard = getBoard();
       // update stats
       if (oldBoard) {
-        const oldBingos = getBingos();
-        setBingos(oldBingos + countBingos(oldBoard));
-        const isFullBingo = isFullBoardBingo(oldBoard);
-        if (isFullBingo) {
-          const oldFullBingos = getFullBoardBingos();
-          setFullBoardBingos(oldFullBingos + 1)
-        }
+        incrementBingos(countBingos(oldBoard), isFullBoardBingo(oldBoard));
       }
       // generate new board
       console.log('New day, new board!');
-      const newBoard = generateBoard(undefined, boardSize);
+      const size = getBoardSize() || DEFAULT_BOARD_SIZE;
+      const newBoard = generateBoard(undefined, size);
       saveBoard(newBoard);
       window.localStorage.setItem(DATE_GENERATED, today);
     }

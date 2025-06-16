@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import './App.css'
-import { saveBoard, getFullBoardBingos, getBingos, clearStats } from './localStorageUtils';
+import { saveBoard, getFullBoardBingos, getBingos, clearStats, setBoardSize, incrementBingos } from './localStorageUtils';
 import type { Board, Square } from './types';
 import { useDailyUpdate } from './useDailyUpdate';
 import { countBingos, isFullBoardBingo } from './boardUtils';
+import { generateBoard } from './generateBoard';
+import { allExercises } from './exercises';
+import { LARGE_BOARD_SIZE, SMALL_BOARD_SIZE } from './boardConstants';
 
-const BOARD_SIZE = 5;
 const FORCE_UPDATE = true;
 
 function App() {
@@ -22,7 +24,7 @@ function App() {
   const totalFullBingos = getFullBoardBingos();
 
   const today = new Date(Date.now()).toLocaleDateString();
-  useDailyUpdate(today, setBoard, BOARD_SIZE, FORCE_UPDATE);
+  useDailyUpdate(today, setBoard, FORCE_UPDATE);
 
   useEffect(() => {
     if (board) {
@@ -107,7 +109,7 @@ function App() {
         setFocusedSquareIndex((prevIndex) => {
           if (prevIndex) {
             const { row, col } = prevIndex;
-            return ({ row: Math.min(row + 1, BOARD_SIZE - 1), col });
+            return ({ row: Math.min(row + 1, board.length - 1), col });
           }
           return null;
         });
@@ -125,7 +127,7 @@ function App() {
         setFocusedSquareIndex((prevIndex) => {
           if (prevIndex) {
             const { row, col } = prevIndex;
-            return ({ row, col: Math.min(col + 1, BOARD_SIZE - 1) });
+            return ({ row, col: Math.min(col + 1, board.length - 1) });
           }
           return null;
         });
@@ -161,6 +163,14 @@ function App() {
     </td >
   }
 
+  const generateNewBoard = (size: number) => {
+    // save any bingos from current board
+    incrementBingos(countBingos(board), isFullBoardBingo(board));
+    // then generate new board and save this size to use for future boards
+    setBoard(generateBoard(allExercises, size));
+    setBoardSize(size);
+  }
+
   return <div className="app">
     <h1>Exercise Bingo</h1>
     <main>
@@ -170,11 +180,15 @@ function App() {
           {bingos > 0 && <div className="bingo">
             {<span>Bingo! x{bingos}</span>} {isFullBingo && <strong>- FULL BINGO!</strong>}
           </div>}
-          <table className="board" role="grid">
+          <table role="grid">
             <tbody>
               {board?.map((row, rowIndex) => <tr role="row">{row.map((square, colIndex) => renderSquare(square, rowIndex, colIndex))}</tr>)}
             </tbody>
           </table>
+        </div>
+        <div className="button-row">
+          <button onClick={() => generateNewBoard(SMALL_BOARD_SIZE)}>New small board</button>
+          <button onClick={() => generateNewBoard(LARGE_BOARD_SIZE)}>New large board</button>
         </div>
       </div>
       <div className="mini-panels">

@@ -26,8 +26,14 @@ h2 {
   min-width: 100px;
 }
 
+.button-row {
+  display: flex;
+  gap: 12px;
+}
+
 .board {
   overflow-x: auto;
+  margin-bottom: 12px;
 }
 
 .stats {
