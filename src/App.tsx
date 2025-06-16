@@ -5,8 +5,8 @@ import type { Board, Square } from './types';
 import { useDailyUpdate } from './useDailyUpdate';
 import { countBingos, isFullBoardBingo } from './boardUtils';
 
-const BOARD_SIZE = 7;
-const FORCE_UPDATE = false;
+const BOARD_SIZE = 5;
+const FORCE_UPDATE = true;
 
 function App() {
   const [board, setBoard] = useState<Board | null>(null);
@@ -164,16 +164,18 @@ function App() {
   return <div className="app">
     <h1>Exercise Bingo</h1>
     <main>
-      <div className="panel daily-challenge">
+      <div className="panel">
         <h2>Daily Challenge - {today}</h2>
-        <div className="bingo">
-          {bingos > 0 && <span>Bingo! x{bingos}</span>} {isFullBingo && <strong>- FULL BINGO!</strong>}
+        <div className="board">
+          {bingos > 0 && <div className="bingo">
+            {<span>Bingo! x{bingos}</span>} {isFullBingo && <strong>- FULL BINGO!</strong>}
+          </div>}
+          <table className="board" role="grid">
+            <tbody>
+              {board?.map((row, rowIndex) => <tr role="row">{row.map((square, colIndex) => renderSquare(square, rowIndex, colIndex))}</tr>)}
+            </tbody>
+          </table>
         </div>
-        <table className="board" role="grid">
-          <tbody>
-            {board?.map((row, rowIndex) => <tr role="row">{row.map((square, colIndex) => renderSquare(square, rowIndex, colIndex))}</tr>)}
-          </tbody>
-        </table>
       </div>
       <div className="mini-panels">
         <div className="panel stats">

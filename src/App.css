@@ -8,8 +8,8 @@ h2 {
 }
 
 #root {
-  min-width: 90vmin;
-  margin: 5vmin;
+  overflow: auto;
+  padding: 24px;
 }
 
 .mini-panels {
@@ -22,14 +22,12 @@ h2 {
 .panel {
   border-radius: 8px;
   background-color: #cccccc;
-  padding: 8px 24px;
+  padding: 16px 24px;
   min-width: 100px;
 }
 
-.daily-challenge {
-  text-align: center;
+.board {
   overflow-x: auto;
-  max-width: 1000px;
 }
 
 .stats {
@@ -38,7 +36,6 @@ h2 {
 
 table {
   table-layout: fixed;
-  width: 100%;
   border-collapse: collapse;
 }
 
@@ -52,9 +49,9 @@ td {
     position: relative;
     overflow: auto;
     border-radius: 0;
-    width: 100%;
+    width: 100px;
     height: 100%;
-    padding: 4px;
+    padding: 8px;
     margin: 0;
   }
 
