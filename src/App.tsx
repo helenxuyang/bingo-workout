@@ -37,6 +37,7 @@ function App() {
   useEffect(() => {
     if (focusedSquareIndex) {
       const { row, col } = focusedSquareIndex;
+      buttonRefs.current[row][col]?.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
       buttonRefs.current[row][col]?.focus();
     }
   }, [focusedSquareIndex]);
@@ -92,9 +93,9 @@ function App() {
 
   const handleArrowKeys: React.KeyboardEventHandler<HTMLButtonElement> = (event) => {
     if (focusedSquareIndex) {
+      event.preventDefault();
+      event.stopPropagation();
       if (event.key === 'ArrowUp') {
-        event.preventDefault();
-        event.stopPropagation();
         setFocusedSquareIndex((prevIndex) => {
           if (prevIndex) {
             const { row, col } = prevIndex;
@@ -104,8 +105,6 @@ function App() {
         });
       }
       if (event.key === 'ArrowDown') {
-        event.preventDefault();
-        event.stopPropagation();
         setFocusedSquareIndex((prevIndex) => {
           if (prevIndex) {
             const { row, col } = prevIndex;
