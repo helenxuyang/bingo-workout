@@ -8,7 +8,7 @@ import { generateBoard } from './generateBoard';
 import { allExercises } from './exercises';
 import { LARGE_BOARD_SIZE, SMALL_BOARD_SIZE } from './boardConstants';
 
-const FORCE_UPDATE = true;
+const FORCE_UPDATE = false;
 
 function App() {
   const [board, setBoard] = useState<Board | null>(null);
