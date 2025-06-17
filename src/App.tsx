@@ -175,10 +175,10 @@ function App() {
     <main>
       <div className="panel">
         <h2>Daily Challenge - {today}</h2>
+        {bingos > 0 && <div className="bingo">
+          {<span>Bingo! x{bingos}</span>} {isFullBingo && <strong>- FULL BINGO!</strong>}
+        </div>}
         <div className="board">
-          {bingos > 0 && <div className="bingo">
-            {<span>Bingo! x{bingos}</span>} {isFullBingo && <strong>- FULL BINGO!</strong>}
-          </div>}
           <table role="grid">
             <tbody>
               {board?.map((row, rowIndex) => <tr role="row">{row.map((square, colIndex) => renderSquare(square, rowIndex, colIndex))}</tr>)}
